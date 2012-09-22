@@ -1,0 +1,38 @@
+
+<!doctype html>
+
+<head>
+<script src="jquery-1.8.2.js"></script>
+<script src="retryAjax.js" /></script>
+</head>
+
+
+<script>
+
+$(document).ready(function(){
+
+	$("#test-button").click(function(){
+
+
+		$.retryAjax({
+		  url: "test.html",
+		  context: document.body
+		  
+		}, 5);
+
+
+	});
+
+
+});
+
+</script>
+
+
+<body>
+
+<input id="test-button" type="button" value="test" />
+
+</body>
+
+</html>
