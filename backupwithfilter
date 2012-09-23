@@ -1,0 +1,31 @@
+(function($, undefined) {
+
+	var retryCounter=0;
+	var maxRetries= options.retryCount || 3;
+
+	$.ajaxPrefilter(function(options, originalOptions, jqXHR ) {
+	
+		var originalErrorFunc=options.error;
+
+		options.error=function(){
+
+			if(retryCounter==maxRetries){
+				
+				originalErrorFunc();
+				retryCounter=0;
+			}
+			else{
+				console.log('modified error func ' + retryCounter);
+				
+				retryCounter++;
+				$.ajax(options);
+			}
+
+			
+		
+		}
+
+	 });
+	
+
+})(jQuery, undefined);

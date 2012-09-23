@@ -12,14 +12,22 @@
 $(document).ready(function(){
 
 	$("#test-button").click(function(){
+	
 
+		var test=
+		$.ajaxWithRetries({
+		  url: "badUrl.html"
+		  ,  error: function(){
+		  	console.log('original error handler func');
+		  } 
+		},
+		{
+			retries: 3,
+			backoff: true
+		}
+		);
 
-		$.retryAjax({
-		  url: "test.html",
-		  context: document.body
-		  
-		}, 5);
-
+		
 
 	});
 
