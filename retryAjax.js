@@ -30,6 +30,8 @@ Description: First stab at wrapper for jQuery AJAX method to retry requests
 
 			if(retryCounter===config.retries){					
 				
+				retryCounter=1;
+				
 				if(typeof originalErrorFunc !== "undefined"){
 					originalErrorFunc();
 				}		
