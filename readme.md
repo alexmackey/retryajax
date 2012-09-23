@@ -14,6 +14,7 @@ Options:
 Example usage:
 ================================
 
+<pre>
 $.ajaxWithRetries(
 	{
 		url: "badUrl.html",  
@@ -27,3 +28,4 @@ $.ajaxWithRetries(
 	}
 );
 
+</pre>
