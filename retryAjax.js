@@ -7,10 +7,9 @@ Description: First stab at wrapper for jQuery AJAX method to retry requests
 
 (function($, undefined) {
 
-	"option strict";
+	"use strict";
 
-	var retryCounter=1,
-	 	backoffInterval=100;
+	var retryCounter=1;
 
 	$.ajaxWithRetries=function(options, retryConfig) {
 	
@@ -19,6 +18,7 @@ Description: First stab at wrapper for jQuery AJAX method to retry requests
 		config={
 			retries: 3,
 			backoff: false,
+			backoffInterval: 1000,
 			backOffFunc: function(currentInterval){
 				return currentInterval *2;
 			}
@@ -40,10 +40,10 @@ Description: First stab at wrapper for jQuery AJAX method to retry requests
 				retryCounter++;
 				
 				if(config.exponentialBackoff){
-					backoffInterval = retryCounter===0 ? backoffInterval : 	config.backOffFunc(backoffInterval);
+					config.backoffInterval = retryCounter===0 ? config.backoffInterval : 	config.backOffFunc(backoffInterval);
 				}
 				
-				setTimeout(function(){$.ajax(options)}, backoffInterval);
+				setTimeout(function(){$.ajax(options)}, config.backoffInterval);
 			}
 				
 		}
