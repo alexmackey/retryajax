@@ -5,54 +5,56 @@ Description: First stab at wrapper for jQuery AJAX method to retry requests
 */
 
 
-(function($, undefined) {
+(function($) {
 
 	"use strict";
 
-	var retryCounter=1;
-
-	$.ajaxWithRetries=function(options, retryConfig) {
 	
-		var 
-		originalErrorFunc=options.error,
-		config={
-			retries: 3,
-			backoff: false,
-			backoffInterval: 1000,
-			backOffFunc: function(currentInterval){
-				return currentInterval *2;
-			}
+		$.ajaxWithRetries=function(options, retryConfig) {
+		
+			var retryCounter=1;
+
+			
+				var 
+				originalErrorFunc=options.error,
+				config={
+					retries: 3,
+					backoff: false,
+					backoffInterval: 1000,
+					backOffFunc: function(currentInterval){
+						return currentInterval *2;
+					}
+				};
+				
+				$.extend(config, retryConfig);
+				
+				options.error=function(){
+
+					if(retryCounter===config.retries){					
+						
+						retryCounter=1;
+						
+						if(typeof originalErrorFunc !== "undefined"){
+							originalErrorFunc();
+						}		
+						
+					}
+					else{
+										
+						retryCounter++;
+						
+						if(config.exponentialBackoff){
+							config.backoffInterval = retryCounter===0 ? config.backoffInterval : 	config.backOffFunc(backoffInterval);
+						}
+						
+						setTimeout(function(){$.ajax(options)}, config.backoffInterval);
+					}
+						
+				}
+
+			return $.ajax(options);
+		
 		};
 		
-		$.extend(config, retryConfig);
-		
-		options.error=function(){
 
-			if(retryCounter===config.retries){					
-				
-				retryCounter=1;
-				
-				if(typeof originalErrorFunc !== "undefined"){
-					originalErrorFunc();
-				}		
-				
-			}
-			else{
-								
-				retryCounter++;
-				
-				if(config.exponentialBackoff){
-					config.backoffInterval = retryCounter===0 ? config.backoffInterval : 	config.backOffFunc(backoffInterval);
-				}
-				
-				setTimeout(function(){$.ajax(options)}, config.backoffInterval);
-			}
-				
-		}
-
-		return $.ajax(options);
-
-	};
-	
-
-})(jQuery, undefined);
+})(jQuery);
