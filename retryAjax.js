@@ -10,14 +10,14 @@ Description: First stab at wrapper for jQuery AJAX method to retry requests
 	"use strict";
 
 	
-		$.ajaxWithRetries=function(options, retryConfig) {
+		$.ajaxWithRetries = function(options, retryConfig) {
 		
-			var retryCounter=1;
+			var retryCounter = 1;
 
 			
 				var 
-				originalErrorFunc=options.error,
-				config={
+				originalErrorFunc = options.error,
+				config = {
 					retries: 3,
 					backoff: false,
 					backoffInterval: 1000,
@@ -28,13 +28,13 @@ Description: First stab at wrapper for jQuery AJAX method to retry requests
 				
 				$.extend(config, retryConfig);
 				
-				options.error=function(){
+				options.error = function(){
 
-					if(retryCounter===config.retries){					
+					if (retryCounter === config.retries){					
 						
-						retryCounter=1;
+						retryCounter = 1;
 						
-						if(typeof originalErrorFunc !== "undefined"){
+						if (typeof originalErrorFunc !== "undefined"){
 							originalErrorFunc();
 						}		
 						
@@ -43,14 +43,14 @@ Description: First stab at wrapper for jQuery AJAX method to retry requests
 										
 						retryCounter++;
 						
-						if(config.exponentialBackoff){
-							config.backoffInterval = retryCounter===0 ? config.backoffInterval : 	config.backOffFunc(backoffInterval);
+						if (config.exponentialBackoff){
+							config.backoffInterval = retryCounter === 0 ? config.backoffInterval : config.backOffFunc(config.backoffInterval);
 						}
 						
-						setTimeout(function(){$.ajax(options)}, config.backoffInterval);
+						setTimeout(function(){$.ajax(options);}, config.backoffInterval);
 					}
 						
-				}
+				};
 
 			return $.ajax(options);
 		
