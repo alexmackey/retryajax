@@ -23,7 +23,7 @@
 				}
 			} else {
 				retryCounter++;
-				if (config.exponentialBackoff) {
+				if (config.backoff) {
 					config.backoffInterval = retryCounter === 0 ? config.backoffInterval
 					    : config.backOffFunc(config.backoffInterval);
 				}
