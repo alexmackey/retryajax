@@ -15,7 +15,7 @@
 		  }
 		};
 		$.extend(config, retryConfig);
-		options.error = function() {
+		options.error = function(jqXHR, textStatus, errorThrown) {
 			if (retryCounter === config.retries) {
 				retryCounter = 1;
 				if (typeof originalErrorFunc !== "undefined") {
@@ -23,9 +23,9 @@
 				}
 			} else {
 				retryCounter++;
-				if (config.exponentialBackoff) {
+				if (config.backoff) {
 					config.backoffInterval = retryCounter === 0 ? config.backoffInterval
-					    : config.backOffFunc(config.backoffInterval);
+					    : config.backOffFunc(config.backoffInterval, textStatus, errorThrown);
 				}
 				setTimeout(function() {
 					$.ajax(options);
